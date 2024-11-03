@@ -30,6 +30,7 @@ dependencies = [
     'typing-extensions>=4.2.0, <5',  # Python Software Foundation License(PSF)
     # deprecated, but can not be subsituted yet for specifier handling
     "packaging",  # BSD License and Apache License 2.0
+    "defusedxml==0.7.1",
 ]
 readme = "README.md"
 
