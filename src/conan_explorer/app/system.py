@@ -14,6 +14,7 @@ from jinja2 import Template
 
 from conan_explorer import INVALID_PATH, PKG_NAME, asset_path
 from conan_explorer.app.logger import Logger
+from security import safe_command
 
 WIN_EXE_FILE_TYPES = [".cmd", ".com", ".bat", ".ps1", ".exe"]
 
@@ -60,12 +61,11 @@ def open_in_file_manager(file_path: Path):
             # no standardized select functionailty.
             # xdg-open on a dir will open the folder in the default file explorer.
             dir_to_view = file_path.parent if file_path.is_file() else file_path
-            return subprocess.Popen(("xdg-open", str(dir_to_view)))
+            return safe_command.run(subprocess.Popen, ("xdg-open", str(dir_to_view)))
         elif platform.system() == "Windows":
             # select switch for highlighting
             creationflags = subprocess.CREATE_NO_WINDOW  # available since 3.7
-            return subprocess.Popen(
-                "explorer /select," + str(file_path), creationflags=creationflags
+            return safe_command.run(subprocess.Popen, "explorer /select," + str(file_path), creationflags=creationflags
             )
     except Exception as e:
         Logger().error(f"Can't show path in file-manager: {str(e)}")
@@ -143,7 +143,7 @@ def execute_cmd(cmd: List[str], is_console_app: bool, shell_linux=False) -> int:
                 creationflags = subprocess.CREATE_NEW_CONSOLE
                 cmd = [generate_launch_script(cmd)]
             # don't use 'executable' arg, because shell scripts won't work correctly
-            proc = subprocess.Popen(cmd, creationflags=creationflags, cwd=str(command_path))
+            proc = safe_command.run(subprocess.Popen, cmd, creationflags=creationflags, cwd=str(command_path))
             return proc.pid
         elif platform.system() == "Linux":
             if is_console_app:
@@ -151,7 +151,7 @@ def execute_cmd(cmd: List[str], is_console_app: bool, shell_linux=False) -> int:
                 # emulators available. Use the default distro emulator through
                 # x-terminal-emulator.
                 cmd = ["x-terminal-emulator", "-e"] + [generate_launch_script(cmd)]
-            proc = subprocess.Popen(cmd, cwd=str(command_path), shell=shell_linux)
+            proc = safe_command.run(subprocess.Popen, cmd, cwd=str(command_path), shell=shell_linux)
             return proc.pid
         return 0
     except Exception as e:
@@ -193,7 +193,7 @@ def open_file(file: Path):
             if platform.system() == "Windows":
                 os.startfile(str(file))
             elif platform.system() == "Linux":
-                subprocess.Popen(("xdg-open", str(file)))
+                safe_command.run(subprocess.Popen, ("xdg-open", str(file)))
     except Exception as e:
         Logger().error(f"Can't open file: {str(e)}")
         return 0
