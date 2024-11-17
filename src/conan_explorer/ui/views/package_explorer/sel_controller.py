@@ -211,9 +211,9 @@ class PackageSelectionController(QObject):
                 return MultiPkgSelectionMode.single_pkg_or_export
             elif source_items[0].type == PkgSelectionType.editable:
                 return MultiPkgSelectionMode.single_editable
-        if all([item.type == PkgSelectionType.ref for item in source_items]):
+        if all(item.type == PkgSelectionType.ref for item in source_items):
             return MultiPkgSelectionMode.multi_ref
-        elif all([item.type == PkgSelectionType.pkg for item in source_items]):
+        elif all(item.type == PkgSelectionType.pkg for item in source_items):
             return MultiPkgSelectionMode.multi_pkg
         return MultiPkgSelectionMode.invalid
 
