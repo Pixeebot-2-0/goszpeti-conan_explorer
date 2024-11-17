@@ -122,11 +122,8 @@ class ConanRefLineEdit(QLineEdit):
     def load_completion(self, text: str):
         if (
             any(
-                [
-                    entry.startswith(text)
-                    for entry in app.conan_api.info_cache.get_all_remote_refs()
-                ]
-            )
+                entry.startswith(text)
+                    for entry in app.conan_api.info_cache.get_all_remote_refs())
             or self.is_valid
         ):
             return
