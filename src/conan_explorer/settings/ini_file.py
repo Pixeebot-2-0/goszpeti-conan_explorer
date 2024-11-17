@@ -65,13 +65,14 @@ class IniSettings(SettingsInterface):
         ini_file_path: Optional[PathLike],
         auto_save=True,
         default_values: Dict[str, Dict[str, Any]] = application_settings_spec(),
-        custom_key_enabled_sections: List[str] = [PLUGINS_SECTION_NAME],
+        custom_key_enabled_sections: Optional[List[str]] = None,
     ):
         """
         Read config.ini file to load settings.
         Create, if not existing, but the directory must already exist!
         Default path is current working dir / settings.ini
         """
+        custom_key_enabled_sections = [PLUGINS_SECTION_NAME] if custom_key_enabled_sections is None else custom_key_enabled_sections
         if not ini_file_path:
             self._ini_file_path = Path().cwd() / "settings.ini"
         else:
