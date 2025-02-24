@@ -182,7 +182,7 @@ class ConanUnifiedApi:
         profile="",
         update=True,
         quiet=False,
-        generators: List[str] = [],
+        generators: Optional[List[str]] = None,
     ) -> Tuple[ConanPackageId, ConanPackagePath]:
         """
         Try to install a conan reference (without id) with the provided extra information.
