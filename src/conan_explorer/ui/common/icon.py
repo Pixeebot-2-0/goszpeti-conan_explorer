@@ -1,4 +1,3 @@
-import xml.dom.minidom as dom
 from pathlib import Path
 
 from PySide6.QtCore import QFileInfo
@@ -7,6 +6,7 @@ from PySide6.QtWidgets import QFileIconProvider
 
 from conan_explorer import INVALID_PATH
 from conan_explorer.app.logger import Logger
+import defusedxml.minidom
 
 
 def get_inverted_asset_image(image_path: Path) -> Path:
@@ -41,7 +41,7 @@ def draw_svg_with_color(svg_path: Path, color="white") -> Path:
     with open(svg_path, "r", encoding="utf-8") as svg:
         svg_content = "".join(svg.readlines())
         svg_content = svg_content.replace("\t", "")
-    svg_dom = dom.parseString("".join(svg_content))
+    svg_dom = defusedxml.minidom.parseString("".join(svg_content))
     svg_paths = svg_dom.getElementsByTagName("path")
     # set color in the dom element
     for path in svg_paths:
