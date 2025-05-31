@@ -326,8 +326,9 @@ class ConanApi(ConanCommonUnifiedApi, metaclass=SignatureCheckMeta):
         profile="",
         update=True,
         quiet=False,
-        generators: List[str] = [],
+        generators: Optional[List[str]] = None,
     ) -> Tuple[ConanPackageId, ConanPackagePath]:
+        generators = [] if generators is None else generators
         package_id = ""
         if conan_options is None:
             conan_options = {}

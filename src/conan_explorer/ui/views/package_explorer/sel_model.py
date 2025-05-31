@@ -34,9 +34,10 @@ class PackageTreeItem(TreeModelItem):
         data: List[str],
         parent=None,
         item_type=PkgSelectionType.ref,
-        pkg_info={},
+        pkg_info=None,
         invalid=False,
     ):
+        pkg_info = {} if pkg_info is None else pkg_info
         super().__init__(data, parent, lazy_loading=True)
         self.pkg_info: ConanPkg = pkg_info
         self.type = item_type
